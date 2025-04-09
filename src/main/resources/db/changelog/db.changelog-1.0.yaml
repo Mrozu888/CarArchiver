@@ -1,0 +1,47 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: kamil_mroz
+      changes:
+        - createTable:
+            tableName: cars
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: make
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: model
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: production_year
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: color
+                  type: varchar(30)
+              - column:
+                  name: price
+                  type: decimal(19,2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: image_url
+                  type: varchar(255)
+              - column:
+                  name: mileage
+                  type: integer
+              - column:
+                  name: fuel_type
+                  type: varchar(20)

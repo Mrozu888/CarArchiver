@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Car Details</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css">
+    <style>
+        .header {
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+        .details-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            background-color: white;
+        }
+        .car-image {
+            max-height: 400px;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+        .spec-badge {
+            font-size: 0.9rem;
+            margin-right: 6px;
+            margin-bottom: 6px;
+        }
+        .detail-label {
+            font-weight: 500;
+            color: #6c757d;
+        }
+        .detail-value {
+            font-size: 1.1rem;
+        }
+        .action-buttons .btn {
+            min-width: 100px;
+        }
+        .price-tag {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2a6496;
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <div class="container">
+        <h1 class="display-4" th:text="${car.year + ' ' + car.make + ' ' + car.model}"></h1>
+        <p class="lead">Detailed information about this vehicle</p>
+    </div>
+</div>
+
+<div class="container mb-5">
+    <div class="details-container">
+        <div class="row">
+            <div class="col-md-6">
+                <img th:src="${car.imageUrl ?: '/images/car-placeholder.png'}"
+                     th:alt="${car.make} + ' ' + ${car.model}"
+                     class="car-image img-fluid mb-4 w-100">
+            </div>
+            <div class="col-md-6">
+                <div class="d-flex justify-content-between align-items-start mb-4">
+                    <h2 class="price-tag" th:text="'$' + ${#numbers.formatDecimal(car.price, 1, 2, 'COMMA')}"></h2>
+                    <div th:if="${car.accidentFree}" class="badge bg-success fs-6">Accident Free</div>
+                </div>
+
+                <div class="mb-4">
+                    <div th:if="${car.color}" class="badge bg-secondary spec-badge" th:text="${car.color}"></div>
+                    <div th:if="${car.fuelType}" class="badge bg-secondary spec-badge" th:text="${car.fuelType}"></div>
+                    <div th:if="${car.mileage}" class="badge bg-secondary spec-badge" th:text="${car.mileage + ' miles'}"></div>
+                    <div th:if="${car.publishDate}" class="badge bg-info spec-badge"
+                         th:text="'Published: ' + ${#temporals.format(car.publishDate, 'yyyy-MM-dd')}"></div>
+                </div>
+
+                <div class="mb-3">
+                    <h4 class="border-bottom pb-2">Specifications</h4>
+                    <div class="row">
+                        <div class="col-6 mb-3">
+                            <div class="detail-label">Make</div>
+                            <div class="detail-value" th:text="${car.make}"></div>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <div class="detail-label">Model</div>
+                            <div class="detail-value" th:text="${car.model}"></div>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <div class="detail-label">Year</div>
+                            <div class="detail-value" th:text="${car.year}"></div>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <div class="detail-label">Color</div>
+                            <div class="detail-value" th:text="${car.color}"></div>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <div class="detail-label">Mileage</div>
+                            <div class="detail-value" th:text="${car.mileage ?: 'N/A'} + ' miles'"></div>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <div class="detail-label">Fuel Type</div>
+                            <div class="detail-value" th:text="${car.fuelType ?: 'N/A'}"></div>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <div class="detail-label">Price</div>
+                            <div class="detail-value" th:text="'$' + ${#numbers.formatDecimal(car.price, 1, 2, 'COMMA')}"></div>
+                        </div>
+                        <div class="col-6 mb-3" th:if="${car.publishDate}">
+                            <div class="detail-label">Publish Date</div>
+                            <div class="detail-value" th:text="${#temporals.format(car.publishDate, 'yyyy-MM-dd')}"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex action-buttons mt-4 pt-3 border-top">
+                    <a th:href="@{/cars/edit/{id}(id=${car.id})}" class="btn btn-primary me-3">Edit</a>
+                    <a th:href="@{/cars}" class="btn btn-outline-secondary">Back to List</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
