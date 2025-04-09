@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "build/libs/*.jar",
+      "use": "@vercel/java"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "build/libs/your-app-name.jar"
+    }
+  ]
+}
