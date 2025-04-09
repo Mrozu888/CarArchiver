@@ -39,9 +39,9 @@ public class CarController {
 
         model.addAttribute("cars", carPage.getContent());
         model.addAttribute("currentPage", page);
+        model.addAttribute("pageSize", size);
         model.addAttribute("totalPages", carPage.getTotalPages());
         model.addAttribute("totalElements", carPage.getTotalElements());
-        model.addAttribute("pageSize", size);
         model.addAttribute("exchangeRate", currencyService.getEuroToPlnRate());
 
         return "car-list";
