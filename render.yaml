@@ -2,7 +2,9 @@ services:
   - type: web
     name: car-archiver
     runtime: java
+    buildCommand: ./mvnw clean package
+    startCommand: java -jar target/*.jar
     env: java
-    buildCommand: "./mvnw package"
-    startCommand: "java -jar target/car-archiver-0.0.1-SNAPSHOT.jar"
-    javaVersion: "21" # Or specify the Java version you need
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: production
