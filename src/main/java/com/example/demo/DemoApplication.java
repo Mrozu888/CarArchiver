@@ -13,8 +13,8 @@ public class DemoApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(DemoApplication.class, args);
 	}
-	@Bean
-	public WebServerFactoryCustomizer<ConfigurableWebServerFactory> webServerFactoryCustomizer() {
-		return factory -> factory.setPort(Integer.parseInt(System.getenv("PORT")));
-	}
+//	@Bean
+//	public WebServerFactoryCustomizer<ConfigurableWebServerFactory> webServerFactoryCustomizer() {
+//		return factory -> factory.setPort(Integer.parseInt(System.getenv("PORT")));
+//	}
 }
