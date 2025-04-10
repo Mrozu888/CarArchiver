@@ -26,24 +26,27 @@ public class CarController {
         this.currencyService = currencyService;
     }
 
-//    @GetMapping
-//    public String getAllCars(
-//            @RequestParam(defaultValue = "0") int page,
-//            @RequestParam(defaultValue = "10") int size,
-//            Model model) {
-//
-//        Pageable pageable = PageRequest.of(page, size);
-//        Page<Car> carPage = carRepository.findAll(pageable);
-//
-//        model.addAttribute("cars", carPage.getContent());
-//        model.addAttribute("currentPage", page);
-//        model.addAttribute("pageSize", size);
-//        model.addAttribute("totalPages", carPage.getTotalPages());
-//        model.addAttribute("totalElements", carPage.getTotalElements());
-//        model.addAttribute("exchangeRate", currencyService.getEuroToPlnRate());
-//
-//        return "car-list";
-//    }
+    @GetMapping
+    public String getAllCars(
+            @RequestParam(required = false) String make,
+            @RequestParam(required = false) String sort,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            Model model) {
+
+        Pageable pageable = createPageable(page, size, sort);
+        Page<Car> carPage = getFilteredCars(make, pageable);
+
+        model.addAttribute("cars", carPage.getContent());
+        model.addAttribute("searchMake", make);
+        model.addAttribute("sort", sort);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", carPage.getTotalPages());
+        model.addAttribute("pageSize", size);
+        model.addAttribute("exchangeRate", currencyService.getEuroToPlnRate());
+
+        return "car-search";
+    }
 
     @GetMapping("/add")
     public String showAddForm(Model model) {
@@ -99,8 +102,7 @@ public class CarController {
         return "car-details";
     }
 
-//    @GetMapping("/search")
-    @GetMapping()
+    @GetMapping("/search")
     public String searchCars(
             @RequestParam(required = false) String make,
             @RequestParam(required = false) String sort,
