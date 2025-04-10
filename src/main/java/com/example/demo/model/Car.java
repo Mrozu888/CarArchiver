@@ -60,6 +60,4 @@ public class Car {
     @Column(name = "publish_date")
     private LocalDate publishDate;
 
-    @Version
-    private Long version;  // For optimistic locking
 }

@@ -9,6 +9,5 @@ CREATE TABLE IF NOT EXISTS cars (
     mileage INTEGER CHECK (mileage >= 0),
     fuel_type VARCHAR(30),
     accident_free BOOLEAN,
-    publish_date DATE,
-    version BIGINT
+    publish_date DATE
 );

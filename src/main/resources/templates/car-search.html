@@ -288,7 +288,7 @@
                         <div class="d-flex justify-content-between mt-3">
                             <span class="d-flex align-items-center">
                                 <i class="bi bi-speedometer2 me-1 text-muted"></i>
-                                <span th:text="${#numbers.formatInteger(car.mileage, 1, 'COMMA') + ' mi'}"></span>
+                                <span th:text="${#numbers.formatInteger(car.mileage, 1, 'COMMA') + ' km'}"></span>
                             </span>
                             <span class="badge bg-light text-dark spec-badge" th:text="${car.fuelType}"></span>
                         </div>
