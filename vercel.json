@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "builds": [
     {
       "src": "target/demo-0.0.1-SNAPSHOT.jar",
