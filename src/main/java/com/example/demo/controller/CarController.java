@@ -32,7 +32,8 @@ public class CarController {
             @RequestParam(defaultValue = "10") int size,
             Model model) {
 
-        Page<Car> carPage = carRepository.findAll(PageRequest.of(page, size));
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Car> carPage = carRepository.findAll(pageable);
 
         model.addAttribute("cars", carPage.getContent());
         model.addAttribute("currentPage", page);
@@ -47,7 +48,7 @@ public class CarController {
     @GetMapping("/add")
     public String showAddForm(Model model) {
         Car car = new Car();
-        car.setPublishDate(LocalDate.now()); // Set default to current date
+        car.setPublishDate(LocalDate.now());
         model.addAttribute("car", car);
         return "add-car";
     }
@@ -58,7 +59,7 @@ public class CarController {
                          RedirectAttributes redirectAttributes) {
         car.setAccidentFree(accidentFree);
         if (car.getPublishDate() == null) {
-            car.setPublishDate(LocalDate.now()); // Set default if not provided
+            car.setPublishDate(LocalDate.now());
         }
         carRepository.save(car);
         redirectAttributes.addFlashAttribute("successMessage", "Car added successfully!");
@@ -66,9 +67,9 @@ public class CarController {
     }
 
     @GetMapping("/edit/{id}")
-    public String showEditForm(@PathVariable String id, Model model) {
+    public String showEditForm(@PathVariable Long id, Model model) {
         Car car = carRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid car Id:" + id));
+                .orElseThrow(() -> new IllegalArgumentException("Invalid car Id: " + id));
         model.addAttribute("car", car);
         return "edit-car";
     }
@@ -84,18 +85,18 @@ public class CarController {
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteCar(@PathVariable String id, RedirectAttributes redirectAttributes) {
+    public String deleteCar(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         carRepository.deleteById(id);
         redirectAttributes.addFlashAttribute("successMessage", "Car deleted successfully!");
         return "redirect:/cars";
     }
 
     @GetMapping("/details/{id}")
-    public String showCarDetails(@PathVariable String id, Model model) {
+    public String showCarDetails(@PathVariable Long id, Model model) {
         Car car = carRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid car Id:" + id));
+                .orElseThrow(() -> new IllegalArgumentException("Invalid car Id: " + id));
         model.addAttribute("car", car);
-        return "car-details"; // This must match your Thymeleaf template name
+        return "car-details";
     }
 
     @GetMapping("/search")
@@ -106,43 +107,8 @@ public class CarController {
             @RequestParam(defaultValue = "10") int size,
             Model model) {
 
-        Page<Car> carPage;
-        Pageable pageable;
-
-        // Create pageable with sorting
-        if (sort != null && !sort.isEmpty()) {
-            switch (sort) {
-                case "price-asc":
-                    pageable = PageRequest.of(page, size, Sort.by("price").ascending());
-                    break;
-                case "price-desc":
-                    pageable = PageRequest.of(page, size, Sort.by("price").descending());
-                    break;
-                case "year-asc":
-                    pageable = PageRequest.of(page, size, Sort.by("year").ascending());
-                    break;
-                case "year-desc":
-                    pageable = PageRequest.of(page, size, Sort.by("year").descending());
-                    break;
-                case "mileage-asc":
-                    pageable = PageRequest.of(page, size, Sort.by("mileage").ascending());
-                    break;
-                case "mileage-desc":
-                    pageable = PageRequest.of(page, size, Sort.by("mileage").descending());
-                    break;
-                default:
-                    pageable = PageRequest.of(page, size);
-            }
-        } else {
-            pageable = PageRequest.of(page, size);
-        }
-
-        // Filter by make if provided
-        if (make != null && !make.isEmpty()) {
-            carPage = carRepository.findByMakeContainingIgnoreCase(make, pageable);
-        } else {
-            carPage = carRepository.findAll(pageable);
-        }
+        Pageable pageable = createPageable(page, size, sort);
+        Page<Car> carPage = getFilteredCars(make, pageable);
 
         model.addAttribute("cars", carPage.getContent());
         model.addAttribute("searchMake", make);
@@ -152,5 +118,28 @@ public class CarController {
         model.addAttribute("pageSize", size);
 
         return "car-search";
+    }
+
+    private Pageable createPageable(int page, int size, String sort) {
+        if (sort == null || sort.isEmpty()) {
+            return PageRequest.of(page, size);
+        }
+
+        return switch (sort) {
+            case "price-asc" -> PageRequest.of(page, size, Sort.by("price").ascending());
+            case "price-desc" -> PageRequest.of(page, size, Sort.by("price").descending());
+            case "year-asc" -> PageRequest.of(page, size, Sort.by("year").ascending());
+            case "year-desc" -> PageRequest.of(page, size, Sort.by("year").descending());
+            case "mileage-asc" -> PageRequest.of(page, size, Sort.by("mileage").ascending());
+            case "mileage-desc" -> PageRequest.of(page, size, Sort.by("mileage").descending());
+            default -> PageRequest.of(page, size);
+        };
+    }
+
+    private Page<Car> getFilteredCars(String make, Pageable pageable) {
+        if (make != null && !make.isEmpty()) {
+            return carRepository.findByMakeContainingIgnoreCase(make, pageable);
+        }
+        return carRepository.findAll(pageable);
     }
 }
