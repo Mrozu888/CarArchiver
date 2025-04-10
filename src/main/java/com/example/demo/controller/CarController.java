@@ -40,8 +40,9 @@ public class CarController {
         model.addAttribute("cars", carPage.getContent());
         model.addAttribute("searchMake", make);
         model.addAttribute("sort", sort);
-        model.addAttribute("currentPage", page);
+        model.addAttribute("currentPage", carPage.getNumber()); // Use page number from Page object
         model.addAttribute("totalPages", carPage.getTotalPages());
+        model.addAttribute("totalElements", carPage.getTotalElements()); // Add total elements
         model.addAttribute("pageSize", size);
         model.addAttribute("exchangeRate", currencyService.getEuroToPlnRate());
 
@@ -116,8 +117,9 @@ public class CarController {
         model.addAttribute("cars", carPage.getContent());
         model.addAttribute("searchMake", make);
         model.addAttribute("sort", sort);
-        model.addAttribute("currentPage", page);
+        model.addAttribute("currentPage", carPage.getNumber()); // Use page number from Page object
         model.addAttribute("totalPages", carPage.getTotalPages());
+        model.addAttribute("totalElements", carPage.getTotalElements()); // Add total elements
         model.addAttribute("pageSize", size);
         model.addAttribute("exchangeRate", currencyService.getEuroToPlnRate());
 
