@@ -14,7 +14,7 @@ SpringBoot application with PostgreSQL backend.
 **Production**:
 - CI/CD implemented (automatically build to docker image and deploy to render app)
 
-## Setup
+# Local setup
 1. **Requirements**:
     - Java 21
     - PostgreSQL 16
@@ -23,7 +23,7 @@ SpringBoot application with PostgreSQL backend.
 2. **Database**:
    - Create db: car-demo
 
-# 2. Configure database
+## Configure database
 src/main/resources/application.properties
 ```properties
 spring.datasource.url=jdbc:postgresql://localhost:5432/car_demo
@@ -32,7 +32,7 @@ spring.datasource.password=your_password
 spring.jpa.hibernate.ddl-auto=update
 ```
 
-# 3. Run application
+## Run application
 ```bash
 mvn spring-boot:run
 ```
